@@ -212,8 +212,10 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-trusted-origins
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8000",  # Default Django dev server
-    "http://127.0.0.1:8000",  # Alternative local address
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://pd.mnmlogic.com",
+    "http://pd.mnmlogic.com",
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
