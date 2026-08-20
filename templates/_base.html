@@ -1,95 +1,219 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bs">
 
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-  <title>{% block title %}Lithium{% endblock title %}</title>
-  <meta name="description" content="A framework for launching new Django projects quickly.">
-  <meta name="author" content="">
+  <title>{% block title %}ProData d.o.o. Velika Kladuša{% endblock title %}</title>
+  <meta name="description" content="ProData d.o.o. — IT oprema, POS kase i video nadzor. Velika Kladuša, BiH.">
   <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
 
   {% block css %}
-  <!-- Bootstrap CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   {% endblock %}
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}">Lithium</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+
+  <!-- Topbar: samo desktop -->
+  <div class="pd-topbar d-none d-md-block">
+    <div class="container d-flex justify-content-between gap-2 py-1 small">
+      <span>Ulica Mahmuta Zulića 11, 77 230 Velika Kladuša</span>
+      <div class="d-flex gap-3">
+        <a href="tel:+38737770079" class="pd-topbar-link">Tel/Fax +387 37 770-079</a>
+        <a href="tel:+38761231363" class="pd-topbar-link">Mobitel +387 61 231-363</a>
+        <a href="mailto:prodata.d.o.o@gmail.com" class="pd-topbar-link">prodata.d.o.o@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg pd-header sticky-top">
+    <div class="container">
+      <a class="navbar-brand pd-logo-link" href="{% url 'home' %}">
+        <img src="{% static 'images/logopd.png' %}" alt="ProData logo" class="pd-logo">
+      </a>
+
+      <!-- Mobile: search + cart + toggler -->
+      <div class="d-flex align-items-center gap-2 d-lg-none">
+        <button class="pd-search-btn-mobile" id="mobile-search-toggle" aria-label="Pretraži">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+        <a href="{% url 'cart' %}" class="pd-cart-btn" aria-label="Korpa" style="position:relative;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.3"></circle><circle cx="18" cy="20" r="1.3"></circle><path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L21 7H6"></path></svg>
+          {% with cart_count=request.session.cart|length %}
+          {% if cart_count > 0 %}
+          <span style="position:absolute;top:-6px;right:-6px;background:#fff;color:#d9333f;font-size:11px;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;">{{ cart_count }}</span>
+          {% endif %}
+          {% endwith %}
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+
+      <!-- Mobile search bar -->
+      <div id="mobile-search-bar" style="display:none;width:100%;padding:8px 0 4px;">
+        <div class="pd-search" style="position:relative;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="live-search-mobile" placeholder="Pretraži proizvode…" autocomplete="off">
+          <div id="search-dropdown-mobile" style="display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border:1px solid var(--pd-border);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);z-index:9999;overflow:hidden;"></div>
+        </div>
+      </div>
+
+      <!-- Desktop collapse -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'about' %}">About</a>
-          </li>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 pd-nav">
+          <li class="nav-item"><a class="nav-link pd-nav-link" href="{% url 'home' %}">Početna</a></li>
+          <li class="nav-item"><a class="nav-link pd-nav-link" href="{% url 'catalog' %}">Katalog</a></li>
+          <li class="nav-item"><a class="nav-link pd-nav-link" href="{% url 'pos' %}">POS kase</a></li>
+          <li class="nav-item"><a class="nav-link pd-nav-link" href="{% url 'servis' %}">Servis</a></li>
+          <li class="nav-item"><a class="nav-link pd-nav-link" href="{% url 'kontakt' %}">Kontakt</a></li>
         </ul>
-        {% if user.is_authenticated %}
-        <div class="mr-auto">
-          <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Settings
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">{{ user.email }}</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="{% url 'account_change_password' %}">Change password</a></li>
-                <li><a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a></li>
-              </ul>
-            </li>
-          </ul>
+
+        <!-- Desktop search -->
+        <div class="pd-search me-3 flex-grow-1 d-none d-lg-flex" style="max-width:420px;min-width:200px;position:relative;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="live-search" placeholder="Pretraži proizvode…" autocomplete="off">
+          <div id="search-dropdown" style="display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border:1px solid var(--pd-border);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);z-index:9999;overflow:hidden;"></div>
         </div>
-        {% else %}
-        <div class="mr-auto">
-          <form class="form d-flex">
-            <a href="{% url 'account_login' %}" class="btn btn-outline-secondary">Log in</a>
-            <a href="{% url 'account_signup' %}" class="btn btn-primary ms-2">Sign up</a>
-          </form>
-        </div>
-        {% endif %}
+
+        <!-- Desktop cart -->
+        <a href="{% url 'cart' %}" class="pd-cart-btn me-3 d-none d-lg-flex" aria-label="Korpa" style="position:relative;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.3"></circle><circle cx="18" cy="20" r="1.3"></circle><path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L21 7H6"></path></svg>
+          {% with cart_count=request.session.cart|length %}
+          {% if cart_count > 0 %}
+          <span style="position:absolute;top:-6px;right:-6px;background:#fff;color:#d9333f;font-size:11px;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;">{{ cart_count }}</span>
+          {% endif %}
+          {% endwith %}
+        </a>
       </div>
     </div>
   </nav>
 
-  <div class="container">
-    {% block content %}
-    <p>Default content...</p>
-    {% endblock content %}
+  <!-- Toast poruke -->
+  {% if messages %}
+  <div style="position:fixed;top:80px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;">
+    {% for message in messages %}
+    <div class="pd-toast">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="5 12 10 17 19 6"></polyline></svg>
+      {{ message }}
+    </div>
+    {% endfor %}
   </div>
+  {% endif %}
 
-  <footer class="footer">
-    <div class="container">
-      <span class="text-muted">Footer...</span>
+  {% block content %}{% endblock content %}
+
+  <!-- Partneri -->
+{% if request.resolver_match.url_name == 'home' %}
+<section class="pd-partners">
+  <div class="container mb-4">
+    <h2 class="pd-section-title">Naši partneri</h2>
+  </div>
+  <div class="pd-marquee-mask">
+    <div class="pd-marquee-track">
+      {% with items=partner_logos|default:partner_logos_default %}
+      {% for p in items %}
+        <div class="pd-partner-tile">{% if p.logo %}<img src="{{ p.logo.url }}" alt="{{ p.name }}" style="max-height:48px;max-width:140px;object-fit:contain;">{% else %}{{ p.name }}{% endif %}</div>
+      {% endfor %}
+      {% for p in items %}
+        <div class="pd-partner-tile">{% if p.logo %}<img src="{{ p.logo.url }}" alt="{{ p.name }}" style="max-height:48px;max-width:140px;object-fit:contain;">{% else %}{{ p.name }}{% endif %}</div>
+      {% endfor %}
+      {% for p in items %}
+        <div class="pd-partner-tile">{% if p.logo %}<img src="{{ p.logo.url }}" alt="{{ p.name }}" style="max-height:48px;max-width:140px;object-fit:contain;">{% else %}{{ p.name }}{% endif %}</div>
+      {% endfor %}
+      {% for p in items %}
+        <div class="pd-partner-tile">{% if p.logo %}<img src="{{ p.logo.url }}" alt="{{ p.name }}" style="max-height:48px;max-width:140px;object-fit:contain;">{% else %}{{ p.name }}{% endif %}</div>
+      {% endfor %}
+      {% for p in items %}
+        <div class="pd-partner-tile">{% if p.logo %}<img src="{{ p.logo.url }}" alt="{{ p.name }}" style="max-height:48px;max-width:140px;object-fit:contain;">{% else %}{{ p.name }}{% endif %}</div>
+      {% endfor %}
+      {% for p in items %}
+        <div class="pd-partner-tile">{% if p.logo %}<img src="{{ p.logo.url }}" alt="{{ p.name }}" style="max-height:48px;max-width:140px;object-fit:contain;">{% else %}{{ p.name }}{% endif %}</div>
+      {% endfor %}
+      {% endwith %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+  <!-- Footer -->
+  <footer class="pd-footer">
+    <div class="container pd-footer-grid">
+      <div>
+        <div class="pd-footer-brand">Pro<span>Data</span></div>
+        <p class="pd-footer-text">Ovlašteni distributer i serviser IT opreme, POS kasa i video nadzora. Velika Kladuša, BiH.</p>
+        <div class="d-flex gap-2">
+          <a href="https://www.facebook.com/prodata.velikakladusa/" target="_blank" rel="noopener" class="pd-social-btn pd-social-fb" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M13.5 21v-7.7h2.6l.4-3h-3v-1.9c0-.9.2-1.5 1.5-1.5h1.6V4.2c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z"></path></svg>
+          </a>
+          <a href="viber://chat?number=%2B38761231363" class="pd-social-btn pd-social-viber" aria-label="Viber">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12.4 2C7.5 2 3.6 5.3 3.6 9.9c0 2.5 1.2 4.7 3.1 6.2-.1.9-.5 2.3-1.2 3.4-.1.2.1.4.3.3 1.6-.6 2.9-1.4 3.6-1.9.9.3 1.9.4 2.9.4 4.9 0 8.8-3.3 8.8-7.9C21.1 5.3 17.2 2 12.4 2zm4.4 10.5c-.2.5-1.1 1-1.6 1-.4 0-.9-.1-2.7-1-2.1-1-3.6-3-3.7-3.2-.1-.2-1-1.3-1-2.5s.6-1.7.8-1.9c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .5.4.2.5.6 1.7.7 1.8.1.1.1.3 0 .5-.1.2-.1.3-.3.4-.1.2-.3.3-.4.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1.2-.2.6-.7.8-1 .2-.2.4-.2.6-.1l1.5.7c.2.1.3.2.3.3.1.1.1.6-.1 1.3z"></path></svg>
+          </a>
+          <a href="mailto:prodata.d.o.o@gmail.com" class="pd-social-btn pd-social-mail" aria-label="Email">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h6 class="pd-footer-heading">Navigacija</h6>
+        <a href="{% url 'home' %}" class="pd-footer-link">Početna</a>
+        <a href="{% url 'catalog' %}" class="pd-footer-link">Katalog</a>
+        <a href="{% url 'pos' %}" class="pd-footer-link">POS kase</a>
+        <a href="{% url 'servis' %}" class="pd-footer-link">Servis</a>
+        <a href="{% url 'kontakt' %}" class="pd-footer-link">Kontakt</a>
+      </div>
+      <div>
+        <h6 class="pd-footer-heading">Usluge</h6>
+        <a href="{% url 'servis' %}" class="pd-footer-link">Servis računara</a>
+        <a href="{% url 'pos' %}" class="pd-footer-link">Fiskalizacija</a>
+        <a href="{% url 'servis' %}" class="pd-footer-link">Video nadzor</a>
+        <a href="{% url 'servis' %}" class="pd-footer-link">Održavanje IT opreme</a>
+      </div>
+      <div>
+        <h6 class="pd-footer-heading">Kontakt</h6>
+        <div class="pd-footer-contact">
+          <span>Ulica Mahmuta Zulića 11<br>77 230 Velika Kladuša</span>
+          <span>+387 37 770-079</span>
+          <span>+387 61 231-363</span>
+          <span>prodata.d.o.o@gmail.com</span>
+          <span class="text-muted-light">Pon–Pet 08–16h · Sub 08–13h</span>
+        </div>
+      </div>
+    </div>
+    <div class="pd-footer-bottom">
+      <span>&copy; {% now "Y" %} ProData d.o.o. Velika Kladuša. Sva prava zadržana. · Hosting+Code:</span>
+      <a href="https://www.mnmlogic.com" target="_blank" rel="noopener" class="pd-mnm-link">
+        <img src="https://www.mnmlogic.com/logoh.png" alt="MNM Logic" class="pd-mnm-logo">
+      </a>
     </div>
   </footer>
 
+  <!-- Float dugmad -->
+  <div class="pd-float-buttons">
+    <a href="https://www.facebook.com/prodata.velikakladusa/" target="_blank" rel="noopener" class="pd-float-btn pd-float-fb">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M13.5 21v-7.7h2.6l.4-3h-3v-1.9c0-.9.2-1.5 1.5-1.5h1.6V4.2c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z"></path></svg>
+      Facebook
+    </a>
+    <a href="viber://chat?number=%2B38761231363" class="pd-float-btn pd-float-viber">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.4 2C7.5 2 3.6 5.3 3.6 9.9c0 2.5 1.2 4.7 3.1 6.2-.1.9-.5 2.3-1.2 3.4-.1.2.1.4.3.3 1.6-.6 2.9-1.4 3.6-1.9.9.3 1.9.4 2.9.4 4.9 0 8.8-3.3 8.8-7.9C21.1 5.3 17.2 2 12.4 2zm4.4 10.5c-.2.5-1.1 1-1.6 1-.4 0-.9-.1-2.7-1-2.1-1-3.6-3-3.7-3.2-.1-.2-1-1.3-1-2.5s.6-1.7.8-1.9c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .5.4.2.5.6 1.7.7 1.8.1.1.1.3 0 .5-.1.2-.1.3-.3.4-.1.2-.3.3-.4.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1.2-.2.6-.7.8-1 .2-.2.4-.2.6-.1l1.5.7c.2.1.3.2.3.3.1.1.1.6-.1 1.3z"></path></svg>
+      Viber
+    </a>
+  </div>
+
   {% block javascript %}
-  <!-- Bootstrap JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-
-  <!-- Project JS -->
   <script src="{% static 'js/base.js' %}"></script>
-
   {% endblock javascript %}
-</body>
 
+</body>
 </html>

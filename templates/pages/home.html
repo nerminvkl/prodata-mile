@@ -1,11 +1,212 @@
-{% extends '_base.html' %}
+{% extends "_base.html" %}
 {% load static %}
-
-{% block title %}Home page{% endblock title %}
+{% block title %}ProData d.o.o. — IT oprema, POS kase i video nadzor{% endblock title %}
 
 {% block content %}
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-  <img src="{% static 'images/lithium.png' %}" class="img-fluid" alt="Lithium logo"/>
-  <p class="lead">A Django starter project with batteries.</p>
-</div>
-{% endblock content %}
+<main>
+
+{% if hero_slides %}
+  {% for slide in hero_slides %}
+  <section class="pd-hero">
+    <div class="pd-hero-dots"></div>
+    <div class="pd-hero-ring pd-hero-ring-1"></div>
+    <div class="pd-hero-ring pd-hero-ring-2"></div>
+    <div class="container-xl pd-hero-grid">
+      <div>
+        {% if slide.subtitle %}
+        <span class="pd-badge">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2l2.9 6.6L22 9.3l-5 4.9 1.2 7.1L12 17.9l-6.2 3.4L7 14.2 2 9.3l7.1-.7z"></path></svg>
+          {{ slide.subtitle }}
+        </span>
+        {% endif %}
+        <h1 class="pd-hero-title">{{ slide.title }}</h1>
+        {% if slide.description %}
+        <p class="pd-hero-text">{{ slide.description }}</p>
+        {% endif %}
+        <div class="d-flex flex-wrap gap-3">
+          {% if slide.btn_primary_text %}
+          <a href="{{ slide.btn_primary_url }}" class="pd-btn pd-btn-accent">{{ slide.btn_primary_text }}</a>
+          {% endif %}
+          {% if slide.btn_secondary_text %}
+          <a href="{{ slide.btn_secondary_url }}" class="pd-btn pd-btn-outline-light">{{ slide.btn_secondary_text }}</a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="pd-hero-figure">
+        {% if slide.image %}
+        <img src="{{ slide.image.url }}" alt="{{ slide.title }}" style="width:100%;height:100%;object-fit:cover;">
+        {% else %}
+        <span>Fotografija prodavnice</span>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+  {% endfor %}
+{% else %}
+  <section class="pd-hero">
+    <div class="pd-hero-dots"></div>
+    <div class="pd-hero-ring pd-hero-ring-1"></div>
+    <div class="pd-hero-ring pd-hero-ring-2"></div>
+    <div class="container-xl pd-hero-grid">
+      <div>
+        <span class="pd-badge">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2l2.9 6.6L22 9.3l-5 4.9 1.2 7.1L12 17.9l-6.2 3.4L7 14.2 2 9.3l7.1-.7z"></path></svg>
+          Ovlašteni distributer i serviser
+        </span>
+        <h1 class="pd-hero-title">IT oprema, POS kase i video nadzor</h1>
+        <p class="pd-hero-text">ProData d.o.o. prodaje i servisira računare, POS/fiskalne sisteme i opremu za video nadzor za firme, radnje i domaćinstva u Velikoj Kladuši i okolini.</p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{% url 'catalog' %}" class="pd-btn pd-btn-accent">Pregledaj katalog</a>
+          <a href="{% url 'pos' %}" class="pd-btn pd-btn-outline-light">POS rješenja</a>
+        </div>
+      </div>
+      <div class="pd-hero-figure">
+        <span>Fotografija prodavnice</span>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+  <section class="container-xl py-4">
+    <div class="row g-3">
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="pd-info-card">
+          <div class="pd-info-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="14" height="10" rx="1"></rect><path d="M15 10h4l3 3v4h-7z"></path><circle cx="6" cy="19" r="1.6"></circle><circle cx="17.5" cy="19" r="1.6"></circle></svg></div>
+          <div><h5>Brza dostava</h5><p>Velika Kladuša i okolina</p></div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="pd-info-card">
+          <div class="pd-info-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 12 10 17 19 6"></polyline></svg></div>
+          <div><h5>Garancija</h5><p>Na svu prodatu opremu</p></div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="pd-info-card">
+          <div class="pd-info-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="13" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></div>
+          <div><h5>Plaćanje pouzećem</h5><p>Plaćate pri preuzimanju</p></div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="pd-info-card">
+          <div class="pd-info-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="4"></rect><polyline points="7 8 12 12 17 8"></polyline></svg></div>
+          <div><h5>Viber podrška</h5><p>Brz odgovor na upite</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-xl py-5">
+    <h2 class="pd-section-title mb-4">Kategorije</h2>
+    <div class="row g-3">
+      {% for c in categories %}
+      <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+        <a href="{% url 'catalog' %}?category={{ c.slug }}" class="pd-category-tile">
+          <span class="pd-category-icon">{{ c.icon_svg|safe }}</span>
+          <span class="pd-category-label">{{ c.label }}</span>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="pd-product-section">
+    <div class="container-xl">
+      <div class="pd-section-head">
+        <div class="d-flex align-items-center gap-3">
+          <span class="pd-section-icon pd-section-icon-light">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 16 14"></polyline></svg>
+          </span>
+          <h2 class="pd-section-title">Zadnje dodano</h2>
+        </div>
+        <a href="{% url 'catalog' %}" class="pd-link-accent">Svi proizvodi →</a>
+      </div>
+      <div class="row g-3">
+        {% for p in recently_added %}
+        <div class="col-6 col-md-4 col-lg-3 col-xl">
+          {% include "shop/_product_card.html" with product=p badge="Novo" %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="pd-product-section pd-product-section-tint">
+    <div class="container-xl">
+      <div class="pd-section-head">
+        <div class="d-flex align-items-center gap-3">
+          <span class="pd-section-icon pd-section-icon-accent">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.2 3.4L7 13.6l-5-4.9 6.9-1L12 2l3.1 5.7 6.9 1-5 4.9 1.2 7.1z"></path></svg>
+          </span>
+          <h2 class="pd-section-title">Izdvojeno</h2>
+        </div>
+        <a href="{% url 'catalog' %}" class="pd-link-accent-dark">Svi proizvodi →</a>
+      </div>
+      <div class="row g-3">
+        {% for p in featured %}
+        <div class="col-6 col-md-4 col-lg-3 col-xl">
+          {% include "shop/_product_card.html" with product=p %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="pd-product-section pd-product-section-dark">
+    <div class="container-xl">
+      <div class="pd-section-head">
+        <div class="d-flex align-items-center gap-3">
+          <span class="pd-section-icon pd-section-icon-accent">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8a2 2 0 0 0-2-2h-4l-6.5 6.5a1.5 1.5 0 0 0 0 2l4 4a1.5 1.5 0 0 0 2 0L20 12z"></path><circle cx="14.5" cy="9.5" r="1.2" fill="currentColor" stroke="none"></circle></svg>
+          </span>
+          <h2 class="pd-section-title text-white">Zadnje sniženo</h2>
+        </div>
+        <a href="{% url 'catalog' %}" class="pd-link-accent">Svi proizvodi →</a>
+      </div>
+      <div class="row g-3">
+        {% for p in on_sale %}
+        <div class="col-6 col-md-4 col-lg-3 col-xl">
+          {% include "shop/_product_card.html" with product=p %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="pd-pos-banner">
+    <div class="pd-hero-dots"></div>
+    <div class="container-xl pd-pos-banner-inner">
+      <div>
+        <h2>POS kase i fiskalni sistemi</h2>
+        <p>Kompletna oprema za fiskalizaciju: registar kase, fiskalni printeri, čitači barkoda i ladice za novac — sa instalacijom i obukom osoblja.</p>
+      </div>
+      <a href="{% url 'pos' %}" class="pd-btn pd-btn-light">Pogledaj POS ponudu</a>
+    </div>
+  </section>
+
+  <section class="container-xl py-5">
+  <h2 class="pd-section-title mb-4">Blog i savjeti</h2>
+  <div class="row g-3">
+    {% for post in blog_posts %}
+    <div class="col-md-4">
+      <a href="{% url 'blog_detail' post.slug %}" class="pd-blog-card" style="text-decoration:none;color:inherit;">
+        <div class="pd-blog-thumb">
+          {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width:100%;height:100%;object-fit:cover;">
+          {% else %}
+            <span>Slika članka</span>
+          {% endif %}
+        </div>
+        <div class="pd-blog-body">
+          <span class="pd-blog-date">{{ post.date }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt }}</p>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+</main>
+{% endblock %}

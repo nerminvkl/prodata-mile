@@ -1,0 +1,12 @@
+{% extends "_base.html" %}
+{% block title %}Narudžba primljena — ProData{% endblock %}
+{% block content %}
+<main class="container-xl py-5 text-center" style="max-width:600px;margin:0 auto;">
+  <div style="font-size:64px;margin-bottom:16px;">✓</div>
+  <h1 class="pd-page-title">Narudžba primljena!</h1>
+  <p style="font-size:16px;color:var(--pd-muted);margin-bottom:32px;">
+    Hvala vam na narudžbi. Kontaktiraćemo vas putem telefona u najkraćem roku radi potvrde i dogovora o dostavi.
+  </p>
+  <a href="{% url 'home' %}" class="pd-btn pd-btn-accent">Nazad na početnu</a>
+</main>
+{% endblock %}

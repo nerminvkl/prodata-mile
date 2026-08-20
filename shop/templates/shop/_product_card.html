@@ -1,0 +1,28 @@
+<div class="pd-product-card">
+  <div class="pd-product-thumb">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%;height:100%;object-fit:cover;">
+    {% else %}
+      <span>Fotografija</span>
+    {% endif %}
+    {% if badge %}
+  <div class="pd-product-badge pd-product-badge-accent">{{ badge }}</div>
+{% elif product.is_on_sale %}
+  <div class="pd-product-badge pd-product-badge-ink"><span style="font-size:10px;font-weight:700;color:#ADFF2F;">-{{ product.discount_percent }}%</span></div>
+{% endif %}
+  </div>
+  <span class="pd-product-cat">{{ product.category }}</span>
+  <h5 class="pd-product-name">{{ product.name }}</h5>
+  <div class="pd-product-price-row">
+    {% if product.is_on_sale %}
+  <span class="pd-product-price">{{ product.sale_price }} KM</span>
+  <span class="pd-product-old-price">{{ product.price }} KM</span>
+{% else %}
+  <span class="pd-product-price">{{ product.price }} KM</span>
+{% endif %}
+  </div>
+  <div class="d-flex gap-2 mt-auto">
+  <a href="{% url 'add_to_cart' product.pk %}" class="pd-btn pd-btn-accent pd-btn-sm" style="flex:1;">Dodaj u korpu</a>
+  <a href="{% url 'product_detail' product.slug %}" class="pd-btn pd-btn-sm" style="flex:none;background:var(--pd-accent-light);color:var(--pd-ink);">→</a>
+</div>
+</div>

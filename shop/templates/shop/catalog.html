@@ -1,0 +1,46 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Katalog — ProData d.o.o.{% endblock %}
+
+{% block content %}
+<main class="container-xl py-5">
+  <h1 class="pd-page-title">Katalog proizvoda</h1>
+
+  <div class="row g-4">
+    <!-- Filteri -->
+    <div class="col-md-3">
+      <div class="pd-filter-box">
+        <h5>Kategorije</h5>
+        <div class="pd-filter-list">
+          <a href="{% url 'catalog' %}" class="pd-filter-check {% if not active_category %}fw-bold{% endif %}">
+            Sve kategorije
+          </a>
+          {% for c in categories %}
+          <a href="{% url 'catalog' %}?category={{ c.slug }}" class="pd-filter-check {% if active_category == c.slug %}fw-bold{% endif %}">
+            {{ c.label }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Proizvodi -->
+    <div class="col-md-9">
+      <div class="pd-catalog-toolbar">
+        <span style="font-size:14px;color:var(--pd-muted);">{{ products.count }} proizvoda</span>
+      </div>
+      <div class="row g-3">
+        {% for p in products %}
+        <div class="col-6 col-md-4 col-lg-3">
+          {% include "shop/_product_card.html" with product=p %}
+        </div>
+        {% empty %}
+        <div class="col-12">
+          <p class="text-muted">Nema proizvoda u ovoj kategoriji.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

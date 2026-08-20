@@ -1,0 +1,41 @@
+{% extends "_base.html" %}
+{% block title %}Korpa — ProData{% endblock %}
+{% block content %}
+<main class="container-xl py-5">
+  <h1 class="pd-page-title">Vaša korpa</h1>
+  {% if items %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="pd-cart-list">
+        {% for item in items %}
+        <div class="pd-cart-row">
+          <div class="d-flex gap-3 align-items-center">
+            {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;">
+            {% endif %}
+            <div>
+              <div style="font-weight:600;">{{ item.product.name }}</div>
+              <div style="font-size:13px;color:var(--pd-muted);">{{ item.cijena }} KM × {{ item.kolicina }}</div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <span style="font-weight:700;">{{ item.subtotal }} KM</span>
+            <a href="{% url 'remove_from_cart' item.product.pk %}" style="color:var(--pd-muted);font-size:13px;">Ukloni</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="pd-filter-box">
+        <h5>Ukupno</h5>
+        <div class="pd-cart-total">{{ ukupno }} KM</div>
+        <a href="{% url 'checkout' %}" class="pd-btn pd-btn-accent pd-btn-block">Naruči →</a>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <p style="color:var(--pd-muted);">Korpa je prazna. <a href="{% url 'catalog' %}">Pregledaj katalog</a></p>
+  {% endif %}
+</main>
+{% endblock %}

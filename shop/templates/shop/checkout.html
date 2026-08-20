@@ -1,0 +1,61 @@
+{% extends "_base.html" %}
+{% block title %}Narudžba — ProData{% endblock %}
+{% block content %}
+<main class="container-xl py-5">
+  <div class="row g-5">
+    <div class="col-lg-7">
+      <h1 class="pd-page-title">Podaci za dostavu</h1>
+      <form method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-6">
+            <label class="form-label">Ime *</label>
+            <input type="text" name="ime" class="form-control" required>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Prezime *</label>
+            <input type="text" name="prezime" class="form-control" required>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Telefon *</label>
+            <input type="text" name="telefon" class="form-control" required>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Adresa dostave *</label>
+            <textarea name="adresa" class="form-control" rows="2" required></textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Napomena</label>
+            <textarea name="napomena" class="form-control" rows="2"></textarea>
+          </div>
+          <div class="col-12 mt-2">
+            <button type="submit" class="pd-btn pd-btn-accent pd-btn-block" style="font-size:16px;padding:16px;">
+              Potvrdi narudžbu — {{ ukupno }} KM
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-lg-5">
+      <h5 style="font-weight:700;margin-bottom:16px;">Pregled narudžbe</h5>
+      <div class="pd-cart-list">
+        {% for item in items %}
+        <div class="pd-cart-row">
+          <span>{{ item.product.name }} × {{ item.kolicina }}</span>
+          <span style="font-weight:600;">{{ item.subtotal }} KM</span>
+        </div>
+        {% endfor %}
+        <div class="pd-cart-row" style="font-weight:700;font-size:16px;">
+          <span>Ukupno</span>
+          <span>{{ ukupno }} KM</span>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--pd-muted);margin-top:12px;">Plaćanje pouzećem pri preuzimanju.</p>
+    </div>
+  </div>
+</main>
+{% endblock %}

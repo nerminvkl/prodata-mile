@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "whitenoise.runserver_nostatic",
+    # "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # Third-party
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # Local
     "accounts",
     "pages",
+    'shop',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
@@ -73,6 +74,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "shop.context_processors.partners",
             ],
         },
     },
@@ -145,6 +147,9 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 # https://whitenoise.readthedocs.io/en/latest/django.html
 STORAGES = {
     "default": {
@@ -204,3 +209,10 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",  # Default Django dev server
     "http://127.0.0.1:8000",  # Alternative local address
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'prodata.d.o.o@gmail.com'
+EMAIL_HOST_PASSWORD = 'app-password-ovdje'  # Gmail App Password
