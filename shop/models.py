@@ -10,7 +10,8 @@ class Category(models.Model):
 
     class Meta:
         ordering = ["order"]
-        verbose_name_plural = "Categories"
+        verbose_name = "Kategorija"
+        verbose_name_plural = "Kategorije"
 
     def __str__(self):
         return self.label
@@ -36,6 +37,8 @@ class Product(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        verbose_name = "Proizvod"
+        verbose_name_plural = "Proizvodi"
 
     def __str__(self):
         return self.name
@@ -44,16 +47,16 @@ class Product(models.Model):
     def is_on_sale(self):
         return self.sale_price is not None and self.sale_price < self.price
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
     @property
     def discount_percent(self):
         if self.is_on_sale:
             return round((1 - self.sale_price / self.price) * 100)
         return None
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class BlogPost(models.Model):
@@ -67,6 +70,8 @@ class BlogPost(models.Model):
 
     class Meta:
         ordering = ["-date"]
+        verbose_name = "Vijest"
+        verbose_name_plural = "Vijesti"
 
     def __str__(self):
         return self.title
@@ -85,9 +90,12 @@ class Partner(models.Model):
 
     class Meta:
         ordering = ["order"]
+        verbose_name = "Partner"
+        verbose_name_plural = "Partneri"
 
     def __str__(self):
         return self.name
+
 
 class HeroSlide(models.Model):
     title = models.CharField(max_length=200)
@@ -103,9 +111,12 @@ class HeroSlide(models.Model):
 
     class Meta:
         ordering = ["order"]
+        verbose_name = "Uvodni dio"
+        verbose_name_plural = "Uvodni dio"
 
     def __str__(self):
         return self.title
+
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -123,6 +134,10 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='nova')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "Narudžba"
+        verbose_name_plural = "Narudžbe"
+
     def __str__(self):
         return f"Narudžba #{self.pk} — {self.ime} {self.prezime}"
 
@@ -136,6 +151,10 @@ class OrderItem(models.Model):
     naziv = models.CharField(max_length=200)
     cijena = models.DecimalField(max_digits=10, decimal_places=2)
     kolicina = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        verbose_name = "Stavka narudžbe"
+        verbose_name_plural = "Stavke narudžbe"
 
     def ukupno(self):
         return self.cijena * self.kolicina

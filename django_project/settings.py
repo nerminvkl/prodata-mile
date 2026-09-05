@@ -239,3 +239,22 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'prodata.d.o.o@gmail.com'
 EMAIL_HOST_PASSWORD = 'app-password-ovdje'
+
+from django.utils.translation import gettext_lazy as _
+
+UNFOLD = {
+    "SITE_TITLE": "ProData Admin",
+    "SITE_HEADER": "ProData d.o.o.",
+    "SITE_SUBHEADER": "Administracija",
+    "SITE_URL": "/",
+    "SITE_ICON": lambda request: "/static/images/logopd.png",
+    "SITE_LOGO": lambda request: "/static/images/logopd.png",
+    "SITE_BRAND": "ProData d.o.o.",
+    "SITE_SYMBOL": "storefront",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "LOGIN": {
+        "image": lambda request: "/static/images/milepocetna.jpg",
+        "redirect_after": "/admin/",
+    },
+}
