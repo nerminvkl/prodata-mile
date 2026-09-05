@@ -52,28 +52,35 @@
       </div>
     </div>
 
-    <div class="col-md-6">
-      <div class="pd-contact-card">
-        <h5 style="font-weight:700;margin-bottom:20px;">Pošaljite upit</h5>
-        <form method="post" action="#">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label class="form-label">Ime i prezime</label>
-            <input type="text" name="name" class="form-control" placeholder="Vaše ime">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Telefon ili email</label>
-            <input type="text" name="contact" class="form-control" placeholder="Kontakt podatak">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Poruka</label>
-            <textarea name="message" class="form-control" rows="5" placeholder="Opišite šta vam treba..."></textarea>
-          </div>
-          <button type="submit" class="pd-btn pd-btn-accent pd-btn-block">Pošalji upit</button>
-        </form>
+<div class="col-md-6">
+  <div class="pd-contact-card">
+    <h5 style="font-weight:700;margin-bottom:20px;">Pošaljite upit</h5>
+    {% if messages %}
+      {% for msg in messages %}
+      <div class="alert {% if msg.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} mb-4">
+        {{ msg }}
       </div>
-    </div>
+      {% endfor %}
+    {% endif %}
+    <form method="post" action="{% url 'kontakt' %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Ime i prezime</label>
+        <input type="text" name="name" class="form-control" placeholder="Vaše ime">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Telefon ili email</label>
+        <input type="text" name="contact" class="form-control" placeholder="Kontakt podatak">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Poruka</label>
+        <textarea name="message" class="form-control" rows="5" placeholder="Opišite šta vam treba..."></textarea>
+      </div>
+      <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+      <button type="submit" class="pd-btn pd-btn-accent pd-btn-block">Pošalji upit</button>
+    </form>
   </div>
+</div>
 
 </main>
 {% endblock %}

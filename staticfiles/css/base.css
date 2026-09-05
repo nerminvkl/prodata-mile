@@ -114,7 +114,7 @@ a:hover{color:var(--pd-accent-dark);}
 
 /* pos banner */
 .pd-pos-banner{background:var(--pd-accent);position:relative;overflow:hidden;}
-.pd-pos-banner-inner{padding:48px 0;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;position:relative;}
+.pd-pos-banner-inner{padding:48px 16px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;position:relative;}
 .pd-pos-banner-inner h2{color:#fff;font-weight:800;font-size:clamp(24px,4vw,34px);margin:0 0 8px;}
 .pd-pos-banner-inner p{color:rgba(255,255,255,.9);max-width:48ch;margin:0;}
 

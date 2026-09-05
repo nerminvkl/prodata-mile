@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product, BlogPost, Partner
+from django.contrib import messages
+
 
 
 def home(request):
@@ -41,7 +43,30 @@ def servis(request):
     return render(request, "shop/servis.html", {})
 
 def kontakt(request):
-    return render(request, "shop/kontakt.html", {})
+    if request.method == 'POST':
+        # Honeypot anti-spam
+        if request.POST.get('website'):
+            return redirect('kontakt')
+
+        name = request.POST.get('name', '')
+        contact = request.POST.get('contact', '')
+        message = request.POST.get('message', '')
+
+        if not name or not contact or not message:
+            messages.error(request, 'Molimo popunite sva polja.')
+            return redirect('kontakt')
+
+        send_mail(
+            subject=f'Upit sa web stranice — {name}',
+            message=f'Ime: {name}\nKontakt: {contact}\n\nPoruka:\n{message}',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=['nermin.vkl@gmail.com'],
+            fail_silently=True,
+        )
+        messages.success(request, 'Vaš upit je uspješno poslan!')
+        return redirect('kontakt')
+
+    return render(request, 'shop/kontakt.html', {})
 
 def cart(request):
     return render(request, "shop/cart.html", {})
