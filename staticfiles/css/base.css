@@ -220,3 +220,48 @@ a:hover{color:var(--pd-accent-dark);}
 .pd-float-fb:hover{background:#145dbf;color:#fff;}
 .pd-float-viber{background:#7360f2;}
 .pd-float-viber:hover{background:#5b4bd6;color:#fff;}
+
+/* Mobile popravke */
+@media (max-width: 991px) {
+  .pd-search-btn-mobile {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--pd-accent-light) !important;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--pd-ink);
+    cursor: pointer;
+    flex: none;
+  }
+
+  .pd-pos-banner-inner {
+    padding: 32px 16px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .pd-pos-banner-inner p {
+    max-width: 100%;
+  }
+
+  .pd-partners {
+    padding: 48px 0;
+  }
+
+  .pd-partners .container {
+    text-align: center;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .pd-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pd-hero-figure {
+    display: none;
+  }
+}
