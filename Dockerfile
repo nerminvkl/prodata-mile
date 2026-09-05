@@ -11,21 +11,12 @@ ADD . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
 
-# Then, use a final image without uv
 FROM python:3.12-slim-bookworm
-
-# Copy the application from the builder
 COPY --from=builder --chown=app:app /app /app
-
 WORKDIR /app
-
-# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PATH="/app/.venv/bin:$PATH"
-
-# Expose port 8000
 EXPOSE 8000
-
-# Use gunicorn on port 8000
+RUN python manage.py collectstatic --noinput
 CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "django_project.wsgi"]
