@@ -7,8 +7,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
   <title>{% block title %}ProData d.o.o. Velika Kladuša{% endblock title %}</title>
-  <meta name="description" content="ProData d.o.o. — IT oprema, POS kase i video nadzor. Velika Kladuša, BiH.">
+  <meta name="description" content="{% block meta_description %}ProData d.o.o. — IT oprema, POS kase i video nadzor. Velika Kladuša, BiH.{% endblock %}">
   <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://prodata.ba{{ request.path }}">
+  <meta property="og:title" content="{% block og_title %}ProData d.o.o. — IT oprema, POS kase i video nadzor{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}ProData d.o.o. prodaje i servisira računare, POS/fiskalne sisteme i opremu za video nadzor za firme, radnje i domaćinstva u Velikoj Kladuši i okolini.{% endblock %}">
+  <meta property="og:image" content="{% block og_image %}https://prodata.ba/media/hero/prodataherooo.jpg{% endblock %}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="bs_BA">
+  <meta property="og:site_name" content="ProData d.o.o.">
 
   {% block css %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
