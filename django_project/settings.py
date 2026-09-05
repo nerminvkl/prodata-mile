@@ -88,8 +88,23 @@ DATABASES = {
 
 # Override sa DATABASE_URL ako postoji
 if os.environ.get("DATABASE_URL"):
-    import dj_database_url
-    DATABASES["default"] = dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    database_url = os.environ.get("DATABASE_URL", "")
+    if database_url.startswith("postgres"):
+        import urllib.parse
+        r = urllib.parse.urlparse(database_url)
+        DATABASES = {"default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": r.path[1:],
+            "USER": r.username,
+            "PASSWORD": r.password,
+            "HOST": r.hostname,
+            "PORT": r.port,
+    }}
+else:
+    DATABASES = {"default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }}
 
 # For Docker/PostgreSQL usage uncomment this and comment the DATABASES config above
 # DATABASES = {
