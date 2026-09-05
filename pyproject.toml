@@ -11,7 +11,6 @@ dependencies = [
   "psycopg[binary] ~=3.3",
   "whitenoise ~=6.12",
   "pillow ~=11.0",
-  "django-decouple ~=3.8",
   "dj-database-url>=2.3",
 ]
 
