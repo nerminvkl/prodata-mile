@@ -17,6 +17,10 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PATH="/app/.venv/bin:$PATH"
+ENV SECRET_KEY=build-dummy-key
+ENV DEBUG=False
+ENV ALLOWED_HOSTS=localhost
+ENV DATABASE_URL=sqlite:////tmp/build.db
 EXPOSE 8000
 RUN python manage.py collectstatic --noinput
 CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "django_project.wsgi"]
