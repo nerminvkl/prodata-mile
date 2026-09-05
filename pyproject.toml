@@ -12,6 +12,7 @@ dependencies = [
   "whitenoise ~=6.12",
   "pillow ~=11.0",
   "dj-database-url>=2.3",
+  "django-unfold>=0.40.0",
 ]
 
 [dependency-groups]

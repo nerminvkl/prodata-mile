@@ -10,12 +10,12 @@ Django==6.0.4
 django-allauth==65.15.1
 django-crispy-forms==2.3
 django-debug-toolbar==6.3.0
-django-decouple==2.1
+django-unfold==0.105.0
 gunicorn==25.3.0
 idna==3.10
 oauthlib==3.3.1
 packaging==24.2
-pillow==12.3.0
+pillow==11.3.0
 psycopg==3.3.3
 psycopg-binary==3.3.3
 pycparser==2.22
