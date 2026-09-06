@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "accounts",
     "pages",
     "shop",
+    "import_export",
 ]
 
 if DEBUG:
@@ -256,3 +257,12 @@ UNFOLD = {
         "redirect_after": "/admin/",
     },
 }
+
+IMPORT_EXPORT_FORMATS = [
+    'import_export.formats.base_formats.XLSX',
+    'import_export.formats.base_formats.CSV',
+]
+
+from import_export.formats.base_formats import XLSX, CSV
+
+IMPORT_EXPORT_FORMATS = [XLSX, CSV]

@@ -1,7 +1,45 @@
 from django.contrib import admin
+from django.utils.text import slugify
 from unfold.admin import ModelAdmin, TabularInline
 from unfold.decorators import display
+from import_export import resources, fields
+from import_export.admin import ImportExportModelAdmin
+from import_export.widgets import ForeignKeyWidget
 from .models import Category, Product, BlogPost, Partner, HeroSlide, Order, OrderItem
+
+
+class ProductResource(resources.ModelResource):
+    category = fields.Field(
+        column_name='Grupa artikala',
+        attribute='category',
+        widget=ForeignKeyWidget(Category, field='label')
+    )
+    name = fields.Field(column_name='Naziv artikla', attribute='name')
+    price = fields.Field(column_name='MPC - KM', attribute='price')
+
+    class Meta:
+        model = Product
+        fields = ('name', 'category', 'price')
+        import_id_fields = ['name']
+        skip_unchanged = True
+
+    def before_import_row(self, row, **kwargs):
+        cat_name = row.get('Grupa artikala', '')
+        if cat_name:
+            Category.objects.get_or_create(
+                slug=slugify(cat_name),
+                defaults={'label': cat_name, 'order': 10}
+            )
+
+    def before_save_instance(self, instance, row, **kwargs):
+        if not instance.slug:
+            base = slugify(instance.name)
+            slug = base
+            counter = 1
+            while Product.objects.filter(slug=slug).exclude(pk=instance.pk).exists():
+                slug = f"{base}-{counter}"
+                counter += 1
+            instance.slug = slug
 
 
 @admin.register(Category)
@@ -13,7 +51,8 @@ class CategoryAdmin(ModelAdmin):
 
 
 @admin.register(Product)
-class ProductAdmin(ModelAdmin):
+class ProductAdmin(ImportExportModelAdmin, ModelAdmin):
+    resource_classes = [ProductResource]
     list_display = ["name", "category", "price", "sale_price", "show_discount", "is_featured", "is_active"]
     list_filter = ["category", "is_featured", "is_active"]
     list_filter_submit = True
