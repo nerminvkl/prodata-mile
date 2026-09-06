@@ -1,2 +1,90 @@
 {% extends "_base.html" %}
-{% block content %}<main class="container-xl py-5"><h1 class="pd-page-title">Servis</h1></main>{% endblock %}
+{% block content %}
+
+
+  <div class="container">
+    <main class="py-5">
+      <h1 class="pd-page-title">Servis i podrška</h1>
+      <p class="pd-page-lead">Servisiramo računare, štampače, video nadzor i POS sisteme, i pružamo redovno održavanje IT opreme za firme.</p>
+
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4">
+          <div class="pd-simple-card">
+            <h4>Servis i popravka računara</h4>
+            <p>Dijagnostika, popravka i nadogradnja desktop i laptop računara.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="pd-simple-card">
+            <h4>Instalacija POS sistema</h4>
+            <p>Ugradnja i konfiguracija kase, fiskalnog printera i periferije.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="pd-simple-card">
+            <h4>Fiskalizacija kase</h4>
+            <p>Puštanje u rad u skladu sa zakonskim propisima FBiH.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="pd-simple-card">
+            <h4>Video nadzor</h4>
+            <p>Ugradnja i podešavanje IP kamera, DVR/NVR sistema.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="pd-simple-card">
+            <h4>Nadogradnja komponenti</h4>
+            <p>Zamjena i ugradnja SSD-a, RAM-a, grafičkih kartica i napajanja.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="pd-simple-card">
+            <h4>Garantni servis</h4>
+            <p>Servis opreme kupljene u ProData, u garantnom roku.</p>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="pd-section-title mt-5 mb-4">Kako izgleda servis</h2>
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="pd-step">
+            <div class="pd-step-num">01</div>
+            <h5>Kontaktirajte nas</h5>
+            <p>Telefonom, Viberom ili u radnji.</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="pd-step">
+            <div class="pd-step-num">02</div>
+            <h5>Dijagnostika</h5>
+            <p>Pregledamo opremu i utvrdimo problem.</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="pd-step">
+            <div class="pd-step-num">03</div>
+            <h5>Ponuda</h5>
+            <p>Dobijate cijenu prije početka rada.</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="pd-step">
+            <div class="pd-step-num">04</div>
+            <h5>Servis / instalacija</h5>
+            <p>Izvršavamo posao i testiramo opremu.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pd-cta-band">
+        <h3>Trebate servis? Javite nam se.</h3>
+        <a href="{% url 'kontakt' %}" class="pd-btn pd-btn-accent">Kontaktirajte nas</a>
+      </div>
+    </main>
+  </div>
+
+
+
+{% endblock %}
