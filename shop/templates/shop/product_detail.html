@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="col-md-6">
-      <span class="pd-product-cat">{{ product.category }}</span>
+      <span class="pd-product-cat">{{ product.category }}{% if product.brand %} · {{ product.brand }}{% endif %}</span>
       <h1 class="pd-page-title">{{ product.name }}</h1>
       <div class="pd-product-price-row mb-4">
         {% if product.is_on_sale %}

@@ -18,12 +18,21 @@ def home(request):
 def catalog(request):
     products = Product.objects.filter(is_active=True)
     category_slug = request.GET.get("category")
+    brand = request.GET.get("brand")
+    
     if category_slug:
         products = products.filter(category__slug=category_slug)
+    if brand:
+        products = products.filter(brand=brand)
+    
+    brands = Product.objects.filter(is_active=True).values_list('brand', flat=True).distinct().exclude(brand='').order_by('brand')
+    
     context = {
         "products": products,
         "categories": Category.objects.all(),
         "active_category": category_slug,
+        "brands": brands,
+        "active_brand": brand,
     }
     return render(request, "shop/catalog.html", context)
 

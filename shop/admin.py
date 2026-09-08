@@ -16,10 +16,11 @@ class ProductResource(resources.ModelResource):
     )
     name = fields.Field(column_name='Naziv artikla', attribute='name')
     price = fields.Field(column_name='MPC - KM', attribute='price')
+    brand = fields.Field(column_name='Brand', attribute='brand')
 
     class Meta:
         model = Product
-        fields = ('name', 'category', 'price')
+        fields = ('name', 'category', 'price', 'brand')
         import_id_fields = ['name']
         skip_unchanged = True
 
@@ -32,8 +33,10 @@ class ProductResource(resources.ModelResource):
             )
 
     def before_save_instance(self, instance, row, **kwargs):
+        model_code = row.get('Model', '')
+        naziv = row.get('Naziv artikla', '')
         if not instance.slug:
-            base = slugify(instance.name)
+            base = slugify(f"{naziv}-{model_code}" if model_code else naziv)
             slug = base
             counter = 1
             while Product.objects.filter(slug=slug).exclude(pk=instance.pk).exists():
@@ -53,11 +56,11 @@ class CategoryAdmin(ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(ImportExportModelAdmin, ModelAdmin):
     resource_classes = [ProductResource]
-    list_display = ["name", "category", "price", "sale_price", "show_discount", "is_featured", "is_active"]
-    list_filter = ["category", "is_featured", "is_active"]
+    list_display = ["name", "brand", "category", "price", "sale_price", "show_discount", "is_featured", "is_active"]
+    list_filter = ["category", "brand", "is_featured", "is_active"]
     list_filter_submit = True
     prepopulated_fields = {"slug": ("name",)}
-    search_fields = ["name"]
+    search_fields = ["name", "brand"]
     list_editable = ["is_featured", "is_active"]
     readonly_fields = ["created_at", "updated_at"]
 

@@ -26,9 +26,43 @@
 
     <!-- Proizvodi -->
     <div class="col-md-9">
-      <div class="pd-catalog-toolbar">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
         <span style="font-size:14px;color:var(--pd-muted);">{{ products.count }} proizvoda</span>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          {% if active_brand %}
+          <a href="?{% if active_category %}category={{ active_category }}{% endif %}"
+             style="font-size:13px;color:var(--pd-accent);">× {{ active_brand }}</a>
+          {% endif %}
+
+          {% if brands %}
+          <div class="dropdown">
+            <button class="pd-btn pd-btn-sm" style="background:var(--pd-surface);border:1px solid var(--pd-border);color:var(--pd-ink);"
+                    data-bs-toggle="dropdown">
+              {% if active_brand %}{{ active_brand }}{% else %}Filtriraj po brandu{% endif %}
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:6px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item {% if not active_brand %}fw-bold{% endif %}"
+                   href="?{% if active_category %}category={{ active_category }}{% endif %}">
+                  Svi brandovi
+                </a>
+              </li>
+              {% for b in brands %}
+              <li>
+                <a class="dropdown-item {% if active_brand == b %}fw-bold{% endif %}"
+                   href="?{% if active_category %}category={{ active_category }}&{% endif %}brand={{ b }}">
+                  {{ b }}
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
       </div>
+
       <div class="row g-3">
         {% for p in products %}
         <div class="col-6 col-md-4 col-lg-3">

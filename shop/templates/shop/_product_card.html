@@ -11,7 +11,7 @@
   <div class="pd-product-badge pd-product-badge-ink"><span style="font-size:10px;font-weight:700;color:#ADFF2F;">-{{ product.discount_percent }}%</span></div>
 {% endif %}
   </div>
-  <span class="pd-product-cat">{{ product.category }}</span>
+  <span class="pd-product-cat">{{ product.category }}{% if product.brand %} · {{ product.brand }}{% endif %}</span>
   <h5 class="pd-product-name">{{ product.name }}</h5>
   <div class="pd-product-price-row">
     {% if product.is_on_sale %}
