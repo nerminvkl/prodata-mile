@@ -27,7 +27,7 @@
     <!-- Proizvodi -->
     <div class="col-md-9">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-        <span style="font-size:14px;color:var(--pd-muted);">{{ products.count }} proizvoda</span>
+        <span style="font-size:14px;color:var(--pd-muted);">{{ page_obj.paginator.count }} proizvoda</span>
 
         <div class="d-flex align-items-center gap-2 flex-wrap">
           {% if active_brand %}
@@ -74,6 +74,37 @@
         </div>
         {% endfor %}
       </div>
+
+      <!-- Paginacija -->
+      {% if page_obj.has_other_pages %}
+      <div class="d-flex justify-content-center gap-2 mt-5">
+        {% if page_obj.has_previous %}
+        <a href="?{% if active_category %}category={{ active_category }}&{% endif %}{% if active_brand %}brand={{ active_brand }}&{% endif %}page={{ page_obj.previous_page_number }}"
+           class="pd-btn pd-btn-sm" style="background:var(--pd-surface);border:1px solid var(--pd-border);color:var(--pd-ink);">
+          ← Prethodna
+        </a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+          <span class="pd-btn pd-btn-sm pd-btn-accent">{{ num }}</span>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a href="?{% if active_category %}category={{ active_category }}&{% endif %}{% if active_brand %}brand={{ active_brand }}&{% endif %}page={{ num }}"
+             class="pd-btn pd-btn-sm" style="background:var(--pd-surface);border:1px solid var(--pd-border);color:var(--pd-ink);">
+            {{ num }}
+          </a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a href="?{% if active_category %}category={{ active_category }}&{% endif %}{% if active_brand %}brand={{ active_brand }}&{% endif %}page={{ page_obj.next_page_number }}"
+           class="pd-btn pd-btn-sm" style="background:var(--pd-surface);border:1px solid var(--pd-border);color:var(--pd-ink);">
+          Sljedeća →
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
+
     </div>
   </div>
 </main>

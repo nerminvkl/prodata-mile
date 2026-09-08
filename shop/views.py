@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product, BlogPost, Partner
 from django.contrib import messages
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 
@@ -19,16 +21,21 @@ def catalog(request):
     products = Product.objects.filter(is_active=True)
     category_slug = request.GET.get("category")
     brand = request.GET.get("brand")
-    
+
     if category_slug:
         products = products.filter(category__slug=category_slug)
     if brand:
         products = products.filter(brand=brand)
-    
+
     brands = Product.objects.filter(is_active=True).values_list('brand', flat=True).distinct().exclude(brand='').order_by('brand')
-    
+
+    paginator = Paginator(products, 50)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        "products": products,
+        "products": page_obj,
+        "page_obj": page_obj,
         "categories": Category.objects.all(),
         "active_category": category_slug,
         "brands": brands,
@@ -185,7 +192,9 @@ def search_ajax(request):
     q = request.GET.get('q', '').strip()
     if len(q) < 2:
         return JsonResponse({'results': []})
-    products = Product.objects.filter(is_active=True, name__icontains=q)[:8]
+    products = Product.objects.filter(is_active=True).filter(
+    Q(name__icontains=q) | Q(brand__icontains=q)
+    )[:8]
     results = []
     for p in products:
         results.append({
@@ -194,5 +203,6 @@ def search_ajax(request):
             'url': f'/katalog/{p.slug}/',
             'image': p.image.url if p.image else '',
             'category': str(p.category) if p.category else '',
+            'brand': p.brand,
         })
     return JsonResponse({'results': results})
