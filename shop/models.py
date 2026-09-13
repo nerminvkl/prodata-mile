@@ -122,7 +122,8 @@ class HeroSlide(models.Model):
 class Order(models.Model):
     STATUS_CHOICES = [
         ('nova', 'Nova'),
-        ('u_obradi', 'U obradi'),
+        ('u_pripremi', 'U pripremi'),
+        ('poslano', 'Poslano'),
         ('isporucena', 'Isporučena'),
         ('otkazana', 'Otkazana'),
     ]

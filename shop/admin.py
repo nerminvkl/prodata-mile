@@ -6,6 +6,8 @@ from import_export import resources, fields
 from import_export.admin import ImportExportModelAdmin
 from import_export.widgets import ForeignKeyWidget
 from .models import Category, Product, BlogPost, Partner, HeroSlide, Order, OrderItem
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class ProductResource(resources.ModelResource):
@@ -103,18 +105,104 @@ class OrderItemInline(TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(ModelAdmin):
-    list_display = ["id", "ime", "prezime", "telefon", "show_status", "created_at"]
+    list_display = ["id", "ime", "prezime", "telefon", "show_status", "ukupno_display", "created_at"]
     list_filter = ["status"]
     list_filter_submit = True
     readonly_fields = ["created_at"]
     inlines = [OrderItemInline]
     search_fields = ["ime", "prezime", "telefon", "email"]
+    actions = ["mark_u_pripremi", "mark_poslano", "mark_isporucena", "mark_otkazana"]
 
     @display(description="Status", label={
         "nova": "info",
-        "u_obradi": "warning",
+        "u_pripremi": "warning",
+        "poslano": "warning",
         "isporucena": "success",
         "otkazana": "danger",
     })
     def show_status(self, obj):
-        return obj.status
+        return obj.get_status_display()
+
+    @display(description="Ukupno")
+    def ukupno_display(self, obj):
+        return f"{obj.ukupno()} KM"
+
+    def mark_u_pripremi(self, request, queryset):
+        queryset.update(status='u_pripremi')
+    mark_u_pripremi.short_description = "→ U pripremi"
+
+    def mark_poslano(self, request, queryset):
+        queryset.update(status='poslano')
+    mark_poslano.short_description = "→ Poslano"
+
+    def mark_isporucena(self, request, queryset):
+        queryset.update(status='isporucena')
+    mark_isporucena.short_description = "→ Isporučena"
+
+    def mark_otkazana(self, request, queryset):
+        queryset.update(status='otkazana')
+    mark_otkazana.short_description = "→ Otkazana"
+
+    def send_status_email(self, order, status_display):
+        if not order.email:
+            return
+        
+        poruke = {
+            'U pripremi': 'Vaša narudžba je primljena i trenutno se priprema za isporuku.',
+            'Poslano': 'Vaša narudžba je poslana i uskoro će biti dostavljena na vašu adresu.',
+            'Isporučena': 'Vaša narudžba je uspješno isporučena. Hvala na kupovini!',
+            'Otkazana': 'Nažalost, vaša narudžba je otkazana. Kontaktirajte nas za više informacija.',
+        }
+
+        poruka = poruke.get(status_display, '')
+        stavke_txt = '\n'.join([
+            f"- {oi.naziv} x{oi.kolicina} = {oi.cijena * oi.kolicina} KM"
+            for oi in order.stavke.all()
+        ])
+
+        send_mail(
+            subject=f'Narudžba #{order.pk} — {status_display}',
+            message=f'''Poštovani {order.ime} {order.prezime},
+
+{poruka}
+
+Vaša narudžba #{order.pk}:
+{stavke_txt}
+
+Ukupno: {order.ukupno()} KM
+Adresa dostave: {order.adresa}
+
+Za pitanja nas kontaktirajte:
+Tel: +387 37 770-079
+Email: prodata.d.o.o@gmail.com
+
+Hvala što kupujete kod ProData d.o.o.
+''',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[order.email],
+            fail_silently=True,
+        )
+
+    def mark_u_pripremi(self, request, queryset):
+        queryset.update(status='u_pripremi')
+        for order in queryset:
+            self.send_status_email(order, 'U pripremi')
+    mark_u_pripremi.short_description = "→ U pripremi"
+
+    def mark_poslano(self, request, queryset):
+        queryset.update(status='poslano')
+        for order in queryset:
+            self.send_status_email(order, 'Poslano')
+    mark_poslano.short_description = "→ Poslano"
+
+    def mark_isporucena(self, request, queryset):
+        queryset.update(status='isporucena')
+        for order in queryset:
+            self.send_status_email(order, 'Isporučena')
+    mark_isporucena.short_description = "→ Isporučena"
+
+    def mark_otkazana(self, request, queryset):
+        queryset.update(status='otkazana')
+        for order in queryset:
+            self.send_status_email(order, 'Otkazana')
+    mark_otkazana.short_description = "→ Otkazana"

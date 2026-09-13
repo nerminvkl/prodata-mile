@@ -154,12 +154,14 @@ def checkout(request):
                 kolicina=item['kolicina'],
             )
 
+        stavke_txt = '\n'.join([
+            f"- {oi.naziv} x{oi.kolicina} = {oi.cijena * oi.kolicina} KM"
+            for oi in order.stavke.all()
+        ])
+
         # Email adminu
-        stavke_txt = '\n'.join([f"- {i['naziv']} x{i['kolicina']} = {i['cijena'] * i['kolicina']} KM" for i in [
-            {'naziv': oi.naziv, 'kolicina': oi.kolicina, 'cijena': oi.cijena} for oi in order.stavke.all()
-        ]])
         send_mail(
-            subject=f'Nova narudžba #{order.pk} — {order.ime} {order.prezime}',
+            subject=f'🛒 Nova narudžba #{order.pk} — {order.ime} {order.prezime}',
             message=f'''Nova narudžba primljena!
 
 Kupac: {order.ime} {order.prezime}
@@ -172,16 +174,47 @@ Stavke:
 {stavke_txt}
 
 Ukupno: {order.ukupno()} KM
+
+Admin: https://prodata.ba/admin/shop/order/{order.pk}/change/
 ''',
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=['prodata.d.o.o@gmail.com'],
             fail_silently=True,
         )
 
+        # Email kupcu (ako je unio email)
+        if order.email:
+            send_mail(
+                subject=f'Potvrda narudžbe #{order.pk} — ProData d.o.o.',
+                message=f'''Poštovani {order.ime} {order.prezime},
+
+Hvala na narudžbi! Primili smo vašu narudžbu i kontaktiraćemo vas u najkraćem roku.
+
+Vaša narudžba #{order.pk}:
+{stavke_txt}
+
+Ukupno: {order.ukupno()} KM
+Adresa dostave: {order.adresa}
+{f"Napomena: {order.napomena}" if order.napomena else ""}
+
+Za pitanja nas kontaktirajte:
+Tel: +387 37 770-079
+Mobitel: +387 61 231-363
+Email: prodata.d.o.o@gmail.com
+
+ProData d.o.o.
+Ulica Mahmuta Zulića 11, 77 230 Velika Kladuša
+''',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[order.email],
+                fail_silently=True,
+            )
+
         request.session['cart'] = {}
         return redirect('order_success')
 
     return render(request, 'shop/checkout.html', {'items': items, 'ukupno': ukupno})
+
 
 def order_success(request):
     return render(request, 'shop/order_success.html', {})

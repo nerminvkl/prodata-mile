@@ -239,6 +239,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'prodata.d.o.o@gmail.com'
 EMAIL_HOST_PASSWORD = 'app-password-ovdje'
 
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+DEFAULT_FROM_EMAIL = 'prodata.d.o.o@gmail.com'
+
 from django.utils.translation import gettext_lazy as _
 
 UNFOLD = {
