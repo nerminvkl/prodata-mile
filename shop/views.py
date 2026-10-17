@@ -3,6 +3,10 @@ from .models import Category, Product, BlogPost, Partner
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
+import logging
+from django.core.mail import EmailMessage
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -62,23 +66,31 @@ def kontakt(request):
     if request.method == 'POST':
         # Honeypot anti-spam
         if request.POST.get('website'):
+            logger.warning('Honeypot okinut: %r', request.POST.get('website'))
             return redirect('kontakt')
 
-        name = request.POST.get('name', '')
-        contact = request.POST.get('contact', '')
-        message = request.POST.get('message', '')
+        name = request.POST.get('name', '').strip()
+        contact = request.POST.get('contact', '').strip()
+        message = request.POST.get('message', '').strip()
 
         if not name or not contact or not message:
             messages.error(request, 'Molimo popunite sva polja.')
             return redirect('kontakt')
 
-        send_mail(
+        email = EmailMessage(
             subject=f'Upit sa web stranice — {name}',
-            message=f'Ime: {name}\nKontakt: {contact}\n\nPoruka:\n{message}',
+            body=f'Ime: {name}\nKontakt: {contact}\n\nPoruka:\n{message}',
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=['nermin.vkl@gmail.com'],
-            fail_silently=True,
+            to=['nermin.vkl@gmail.com'],
+            reply_to=[contact] if '@' in contact else None,
         )
+        try:
+            email.send(fail_silently=False)
+        except Exception:
+            logger.exception('Slanje kontakt maila nije uspjelo')
+            messages.error(request, 'Poruka nije poslana. Pokušajte ponovo ili nas pozovite.')
+            return redirect('kontakt')
+
         messages.success(request, 'Vaš upit je uspješno poslan!')
         return redirect('kontakt')
 
